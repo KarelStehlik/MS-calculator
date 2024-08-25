@@ -1,6 +1,6 @@
 def help():
     return '''
-crit [chance in %], [multiplier in %]:
+crit [chance in %], [multiplier in %], [joker=False]:
     returns the average damage multiplier from crits
 titan [attack]:
     returns new attack after obtaining titan
@@ -10,12 +10,9 @@ accel [cdr in %], [old movespeed in %], [new movespeed in %]:
     returns new cdr in % after increasing move speed with accelerator
 gaia [hp]:
     returns attack value gained from gaia
-joker [crit chance in %], [multiplier in %]:
-    returns average damage multiplier from joker
-croker [crit chance in %], [multiplier in %]:
-    damage multiplier from crit including joker
 equation [string]:
-    attempts to solve an equation with variable x
+    attempts to solve an equation with variable x.
+    if an expression is entred containing " = ", it is considered an equation.
 hydraEclipse [hitcount, hasHydra, hasEclipse, hasRose, hasSword]
     returns damage multiplier from items which interact with current health
     enemies which you would otherwise kill with a given # of hits
@@ -94,15 +91,12 @@ def hydraEclipse(baseHits, hasHydra, hasEclipse, hasRose=False, hasSword=False):
     return damageDealt/actualHits
 
 
-def joker(chance, mult):
-    return croker(chance, mult)/crit(chance, mult)
-
-def croker(chance, mult):
-    totalMult = 1 + min(1,chance/100) * ((mult/100-1) + 0.5*(chance/100)*(mult/100-1))
-    return totalMult
-
-def crit(chance, mult):
-    return 1+min(1,chance/100)*(mult/100-1)
+def crit(chance, mult, joker=False):
+    chance = min(1, chance/100)
+    mult /= 100
+    if not joker:
+        return 1 + chance *(mult-1)
+    return 1 + chance * (mult-1 + chance/2*(mult-1))
 
 def titan(attack):
     return attack + (attack-100)*.5
