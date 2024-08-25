@@ -8,7 +8,7 @@ unTitan [attack]:
     returns what attack would be without titan
 accel [cdr in %], [old movespeed in %], [new movespeed in %]:
     returns new cdr in % after increasing move speed with accelerator
-gaia [hp]:
+gaia [hp before gaia]:
     returns attack value gained from gaia
 equation [string]:
     attempts to solve an equation with variable x.
@@ -114,10 +114,7 @@ def accel(cdr, oldspeed, newspeed):
     return 100*(1-(oldcd/oldAccel*newAccel))
 
 def gaia(hp):
-    return int((hp+100)/20)*30*.03
-
-def gaiaUnround(hp):
-    return (hp+100)/20*30*.03
+    return (hp+100)*3/20
 
 def equation(eq):
     eq = f'({eq.replace(" = ", ")-(")})'
